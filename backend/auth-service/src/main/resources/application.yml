@@ -1,0 +1,49 @@
+spring:
+  application:
+    name: auth-service
+  # Config Server import disabled for local development to allow H2 fallback
+  # config:
+  #   import: optional:configserver:http://localhost:8888
+  cloud:
+    config:
+      enabled: false
+
+  # Fallback configuration (used when Config Server is unavailable)
+  datasource:
+    # Local fallback: in-memory H2 for development. Replace with MySQL in production.
+    url: jdbc:h2:mem:auth_db;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+        format_sql: true
+
+server:
+  port: 8081
+
+# JWT Configuration
+jwt:
+  secret: stationeryManagementSecretKey2024StationeryApp
+  expiration: 86400000
+
+# Eureka Client Configuration
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    prefer-ip-address: true
+
+# Actuator Configuration
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
