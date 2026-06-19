@@ -5,6 +5,10 @@ pipeline {
         timestamps()
     }
 
+    environment {
+        DOCKER_BUILDKIT = '0'   // Disable BuildKit (helps avoid EOF issues)
+    }
+
     stages {
 
         stage('Checkout') {
@@ -14,10 +18,9 @@ pipeline {
             }
         }
 
-        stage('Build Jars') {
+        stage('Build Backend JARs') {
             steps {
                 dir('backend') {
-                    echo '🔨 Building backend jars (reactor mvn package)...'
                     bat 'mvn clean package -DskipTests -B'
                 }
             }
@@ -29,9 +32,15 @@ pipeline {
             }
         }
 
-        stage('Build Fresh Images') {
+        stage('Clean Docker Builder') {
             steps {
-                bat 'docker compose -f ci-cd/docker-compose.yml build --no-cache'
+                bat 'docker builder prune -af'
+            }
+        }
+
+        stage('Build Docker Images') {
+            steps {
+                bat 'docker compose -f ci-cd/docker-compose.yml build --progress=plain --no-cache'
             }
         }
 
@@ -49,12 +58,17 @@ pipeline {
     }
 
     post {
+        always {
+            bat 'docker image prune -f'
+        }
+
         success {
             echo 'SMS deployed successfully'
         }
 
         failure {
             echo 'SMS deployment failed'
+            bat 'docker compose -f ci-cd/docker-compose.yml logs'
         }
     }
 }
