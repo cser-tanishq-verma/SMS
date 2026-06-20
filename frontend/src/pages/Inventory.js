@@ -52,32 +52,12 @@ const Inventory = () => {
 
   return (
     <div className="page-card">
-      <div className="page-header">
-        <div>
-          <h1>Inventory</h1>
-          <p className="page-subtitle">Browse stationery items and search by name.</p>
-        </div>
-        {user?.role === 'ADMIN' && (
-          <div className="page-actions">
-            <Link to="/inventory/add" className="btn btn-primary">
-              Add New Item
-            </Link>
-          </div>
-        )}
+      <div className="page-header" style={{ textAlign: 'center', marginBottom: '2rem' }}>
+        <h1 style={{ fontSize: '2.5rem', background: 'var(--gradient-primary)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Inventory Catalog</h1>
+        <p className="page-subtitle">Browse stationery items below.</p>
       </div>
 
-      <form className="page-search" onSubmit={handleSearch}>
-        <input
-          type="text"
-          placeholder="Search items by name"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="input-search"
-        />
-        <button type="submit" className="btn btn-secondary">
-          Search
-        </button>
-      </form>
+
 
       {error && <div className="alert alert-error">{error}</div>}
 
@@ -129,26 +109,50 @@ const Inventory = () => {
       </div>
 
       {!search && (
-        <div className="pagination-controls">
+        <div className="pagination-controls" style={{ justifyContent: 'center', marginTop: '2rem' }}>
           <button
             className="pagination-btn"
             disabled={page === 0}
             onClick={() => setPage((prev) => Math.max(prev - 1, 0))}
+            style={{ borderRadius: '50px' }}
           >
-            Previous
+            &larr; Previous
           </button>
-          <span>
+          <span style={{ fontWeight: '600' }}>
             Page {page + 1} • {total} items
           </span>
           <button
             className="pagination-btn"
             disabled={(page + 1) * size >= total}
             onClick={() => setPage((prev) => prev + 1)}
+            style={{ borderRadius: '50px' }}
           >
-            Next
+            Next &rarr;
           </button>
         </div>
       )}
+
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1.5rem', marginTop: '3rem', padding: '2rem', background: 'var(--bg-secondary)', borderRadius: 'var(--radius-lg)' }}>
+        <form className="page-search" onSubmit={handleSearch} style={{ display: 'flex', gap: '1rem', width: '100%', maxWidth: '600px' }}>
+          <input
+            type="text"
+            placeholder="Search items by name..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="input-search"
+            style={{ flex: 1, borderRadius: '50px' }}
+          />
+          <button type="submit" className="btn btn-secondary" style={{ borderRadius: '50px', padding: '0 2rem' }}>
+            Search
+          </button>
+        </form>
+
+        {user?.role === 'ADMIN' && (
+          <Link to="/inventory/add" className="btn btn-primary" style={{ padding: '1rem 3rem', fontSize: '1.2rem', borderRadius: '50px', marginTop: '1rem', width: '100%', maxWidth: '600px', textAlign: 'center' }}>
+            + Add New Stationery Item
+          </Link>
+        )}
+      </div>
     </div>
   );
 };

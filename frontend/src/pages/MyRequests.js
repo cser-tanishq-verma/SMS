@@ -7,6 +7,7 @@ const MyRequests = () => {
   const [status, setStatus] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [sortOrder, setSortOrder] = useState('desc');
 
   const loadRequests = async () => {
     setLoading(true);
@@ -37,10 +38,10 @@ const MyRequests = () => {
         </div>
       </div>
 
-      <div className="request-filter">
+      <div className="request-filter" style={{ display: 'flex', gap: '1rem', alignItems: 'center', marginBottom: '1rem' }}>
         <label>
-          Filter by status
-          <select value={status} onChange={(e) => setStatus(e.target.value)}>
+          Filter by status: 
+          <select value={status} onChange={(e) => setStatus(e.target.value)} style={{ marginLeft: '0.5rem' }}>
             <option value="">All</option>
             <option value="PENDING">Pending</option>
             <option value="APPROVED">Approved</option>
@@ -48,6 +49,12 @@ const MyRequests = () => {
             <option value="FULFILLED">Fulfilled</option>
           </select>
         </label>
+        <button 
+          className="btn btn-secondary" 
+          onClick={() => setSortOrder(sortOrder === 'desc' ? 'asc' : 'desc')}
+        >
+          Sort by Date ({sortOrder === 'desc' ? 'Newest First' : 'Oldest First'})
+        </button>
       </div>
 
       {error && <div className="alert alert-error">{error}</div>}
@@ -66,7 +73,13 @@ const MyRequests = () => {
           </thead>
           <tbody>
             {requests.length ? (
-              requests.map((request) => (
+              [...requests]
+                .sort((a, b) => {
+                  const dateA = new Date(a.updatedAt || a.createdAt || 0).getTime();
+                  const dateB = new Date(b.updatedAt || b.createdAt || 0).getTime();
+                  return sortOrder === 'desc' ? dateB - dateA : dateA - dateB;
+                })
+                .map((request) => (
                 <tr key={request.id}>
                   <td>{request.id}</td>
                   <td>{request.requestId}</td>

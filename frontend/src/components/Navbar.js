@@ -43,15 +43,7 @@ const Navbar = () => {
   return (
     <nav className="navbar">
       <div className="navbar-container">
-        {/* Brand — text only, no logo */}
-        <Link to="/dashboard" className="navbar-brand" onClick={closeMobile}>
-          <div className="brand-text">
-            <span className="brand-name">SMS</span>
-            <span className="brand-subtitle">Stationery Management</span>
-          </div>
-        </Link>
-
-        {/* Desktop Navigation */}
+        {/* Desktop Navigation (Left) */}
         <div className={`navbar-links ${mobileOpen ? 'mobile-open' : ''}`}>
           {navLinks.map((link) => (
             <Link
@@ -67,22 +59,29 @@ const Navbar = () => {
           ))}
         </div>
 
-        {/* User Section */}
+        {/* Brand (Center) */}
+        <Link to="/dashboard" className="navbar-brand" onClick={closeMobile} style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)' }}>
+          <div className="brand-text">
+            <span className="brand-name" style={{ fontSize: '1.5rem', fontWeight: '800' }}>SMS</span>
+          </div>
+        </Link>
+
+        {/* User Section (Right) */}
         <div className="navbar-user">
+          <button className="logout-btn" onClick={handleLogout} title="Logout">
+            <span className="logout-text">Logout</span>
+          </button>
           <div className="user-info">
-            <span className="user-avatar">
-              {user?.username?.charAt(0).toUpperCase() || 'U'}
-            </span>
-            <div className="user-details">
+            <div className="user-details" style={{ textAlign: 'right' }}>
               <span className="user-name">{user?.username}</span>
               <span className={`role-badge ${user?.role?.toLowerCase()}`}>
                 {user?.role}
               </span>
             </div>
+            <span className="user-avatar" style={{ background: 'var(--gradient-primary)' }}>
+              {user?.username?.charAt(0).toUpperCase() || 'U'}
+            </span>
           </div>
-          <button className="logout-btn" onClick={handleLogout} title="Logout">
-            <span className="logout-text">Logout</span>
-          </button>
         </div>
 
         {/* Mobile Hamburger */}

@@ -54,8 +54,8 @@
   width: 100%;
   max-width: 520px;
   background: var(--surface-panel);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  /* removed blur */
+  /* removed blur */
   border: 1px solid var(--form-border);
   border-radius: var(--radius-xl);
   padding: 2.5rem;
@@ -156,7 +156,7 @@
   background: var(--form-bg);
   border: 1px solid var(--form-border);
   border-radius: var(--radius-md);
-  color: var(--text-primary);
+  color: var(--text-secondary);
   font-size: 0.9375rem;
   transition: all var(--transition-normal);
 }
@@ -167,9 +167,9 @@
 }
 
 .form-input:focus {
-  border-color: var(--accent-blue);
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
-  background: rgba(255, 255, 255, 0.85);
+  border-color: var(--form-focus);
+  box-shadow: var(--shadow-glow-primary);
+  background: var(--form-bg);
 }
 
 .form-input::placeholder {

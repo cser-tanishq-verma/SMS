@@ -11,7 +11,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.stationery.inventory.dto.AuditLogResponse;
+import com.stationery.inventory.model.AuditLog;
+import com.stationery.inventory.repository.AuditLogRepository;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * REST controller for inventory management operations.
@@ -25,9 +29,11 @@ public class InventoryController {
     private static final Logger log = LoggerFactory.getLogger(InventoryController.class);
 
     private final InventoryService inventoryService;
+    private final AuditLogRepository auditLogRepository;
 
-    public InventoryController(InventoryService inventoryService) {
+    public InventoryController(InventoryService inventoryService, AuditLogRepository auditLogRepository) {
         this.inventoryService = inventoryService;
+        this.auditLogRepository = auditLogRepository;
     }
 
     /**
@@ -53,6 +59,11 @@ public class InventoryController {
                 userName, userRole, request.getName());
 
         StationeryItemResponse response = inventoryService.createItem(request);
+
+        AuditLog auditLog = new AuditLog("CREATE", response.getId(), response.getName(), userName, 
+                "Created item with quantity: " + request.getAvailableQuantity());
+        auditLogRepository.save(auditLog);
+
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
@@ -80,7 +91,7 @@ public class InventoryController {
      * @param id the item ID
      * @return the item details
      */
-    @GetMapping("/{id}")
+    @GetMapping("/{id:\\d+}")
     public ResponseEntity<StationeryItemResponse> getItemById(@PathVariable Long id) {
         StationeryItemResponse response = inventoryService.getItemById(id);
         return ResponseEntity.ok(response);
@@ -113,7 +124,7 @@ public class InventoryController {
      * @param userName the username from X-User-Name header
      * @return the updated item
      */
-    @PutMapping("/{id}")
+    @PutMapping("/{id:\\d+}")
     public ResponseEntity<StationeryItemResponse> updateItem(
             @PathVariable Long id,
             @Valid @RequestBody StationeryItemRequest request,
@@ -129,6 +140,11 @@ public class InventoryController {
         log.info("AUDIT: User '{}' (role: {}) updating stationery item ID: {}", userName, userRole, id);
 
         StationeryItemResponse response = inventoryService.updateItem(id, request);
+
+        AuditLog auditLog = new AuditLog("UPDATE", id, response.getName(), userName, 
+                "Updated item. New quantity: " + request.getAvailableQuantity());
+        auditLogRepository.save(auditLog);
+
         return ResponseEntity.ok(response);
     }
 
@@ -140,7 +156,7 @@ public class InventoryController {
      * @param userName the username from X-User-Name header
      * @return HTTP 204 No Content on success
      */
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{id:\\d+}")
     public ResponseEntity<Void> deleteItem(
             @PathVariable Long id,
             @RequestHeader(value = "X-User-Role", defaultValue = "") String userRole,
@@ -154,7 +170,14 @@ public class InventoryController {
 
         log.info("AUDIT: User '{}' (role: {}) deleting stationery item ID: {}", userName, userRole, id);
 
+        StationeryItemResponse item = inventoryService.getItemById(id);
+        String itemName = item != null ? item.getName() : "Unknown";
+
         inventoryService.deleteItem(id);
+
+        AuditLog auditLog = new AuditLog("DELETE", id, itemName, userName, "Deleted item");
+        auditLogRepository.save(auditLog);
+
         return ResponseEntity.noContent().build();
     }
 
@@ -184,14 +207,24 @@ public class InventoryController {
      * @param quantity the quantity to deduct
      * @return true if deduction was successful
      */
-    @PutMapping("/{id}/deduct")
+    @PutMapping("/{id:\\d+}/deduct")
     public ResponseEntity<Boolean> deductQuantity(
             @PathVariable Long id,
             @RequestParam Integer quantity) {
 
         log.info("AUDIT: Internal service call - deducting {} units from item ID: {}", quantity, id);
 
+        StationeryItemResponse item = inventoryService.getItemById(id);
+        String itemName = item != null ? item.getName() : "Unknown";
+
         boolean result = inventoryService.deductQuantity(id, quantity);
+
+        if (result) {
+            AuditLog auditLog = new AuditLog("DEDUCT", id, itemName, "SYSTEM", 
+                    "Deducted quantity: " + quantity);
+            auditLogRepository.save(auditLog);
+        }
+
         return ResponseEntity.ok(result);
     }
 
@@ -207,5 +240,27 @@ public class InventoryController {
 
         List<StationeryItemResponse> items = inventoryService.searchItems(keyword);
         return ResponseEntity.ok(items);
+    }
+
+    /**
+     * Retrieves all audit logs. Admin-only.
+     *
+     * @param userRole the role from X-User-Role header
+     * @return list of audit logs
+     */
+    @GetMapping("/audit-logs")
+    public ResponseEntity<List<AuditLogResponse>> getAuditLogs(
+            @RequestHeader(value = "X-User-Role", defaultValue = "") String userRole) {
+
+        if (!"ADMIN".equalsIgnoreCase(userRole)) {
+            log.warn("AUDIT: Unauthorized audit logs access attempt with role '{}'", userRole);
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
+        List<AuditLogResponse> logs = auditLogRepository.findAll().stream()
+                .map(audit -> new AuditLogResponse(audit.getId(), audit.getAction(), audit.getItemId(), audit.getItemName(), audit.getChangedBy(), audit.getDetails(), audit.getCreatedAt()))
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(logs);
     }
 }

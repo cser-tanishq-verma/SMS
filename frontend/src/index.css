@@ -1,84 +1,86 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
+
 /* =========================================
    GLOBAL RESET & DESIGN SYSTEM VARIABLES
-   Pastel Theme
+   Oiler Navy & Sunset Orange Theme (Dark Mode)
    ========================================= */
 
 :root {
   /* Background Colors */
-  --bg-primary: #f6f1ea; /* soft beige */
-  --bg-secondary: #f1f5f9;
-  --bg-tertiary: #eef2ff;
-  --bg-card: rgba(255, 255, 255, 0.92);
-  --bg-card-hover: rgba(255, 255, 255, 0.98);
+  --bg-primary: #19244e; /* Oiler Navy */
+  --bg-secondary: #0d132b; 
+  --bg-tertiary: #253c96; /* Brilliant Blue */
+  --bg-card: rgba(37, 60, 150, 0.25);
+  --bg-card-hover: rgba(37, 60, 150, 0.45);
 
   /* Specific surface roles */
-  --surface-page: linear-gradient(180deg, #fbfdff 0%, #f8fbff 100%);
-  --surface-panel: var(--bg-card);
-  --form-bg: #ffffff;
-  --form-border: rgba(37, 99, 235, 0.12);
-  --form-focus: rgba(37, 99, 235, 0.18);
+  --surface-page: linear-gradient(145deg, #19244e 0%, #0d132b 100%);
+  --surface-panel: rgba(25, 36, 78, 0.7);
+  --form-bg: rgba(13, 19, 43, 0.8);
+  --form-border: rgba(196, 231, 229, 0.2);
+  --form-focus: #f59a1e; /* Mango */
 
-  /* Brand Colors: Blue, Red, Orange */
-  --accent-blue: #2563eb;   /* blue-600 */
-  --accent-blue-700: #1e40af;
-  --accent-red: #ef4444;    /* red-500 */
-  --accent-orange: #f97316; /* orange-500 */
+  /* Brand Colors */
+  --accent-blue: #253c96;   /* Brilliant Blue */
+  --accent-light-blue: #c4e7e5; /* Ocean Water */
+  --accent-red: #f36b2e;    /* Sunset Orange */
+  --accent-orange: #f59a1e; /* Mango */
 
   /* Button colors */
-  --btn-primary-bg: var(--accent-blue);
+  --btn-primary-bg: linear-gradient(135deg, #f59a1e, #f36b2e);
   --btn-primary-text: #ffffff;
-  --btn-primary-hover: #1e4fd8;
+  --btn-primary-hover: linear-gradient(135deg, #f36b2e, #f59a1e);
 
-  --btn-secondary-bg: rgba(37, 99, 235, 0.06);
-  --btn-secondary-text: var(--text-primary);
-  --btn-secondary-border: rgba(37, 99, 235, 0.12);
+  --btn-secondary-bg: rgba(196, 231, 229, 0.1);
+  --btn-secondary-text: #c4e7e5;
+  --btn-secondary-border: rgba(196, 231, 229, 0.3);
 
-  --btn-danger-bg: var(--accent-red);
+  --btn-danger-bg: #f36b2e;
   --btn-danger-text: #fff;
 
   /* Card accents */
-  --card-accent: linear-gradient(90deg, rgba(37,99,235,0.12), rgba(249,115,22,0.08));
+  --card-accent: linear-gradient(90deg, #f59a1e, #f36b2e);
 
   /* Gradients */
-  --gradient-primary: linear-gradient(135deg, #2563eb, #f97316);
-  --gradient-accent: linear-gradient(135deg, #ef4444, #f97316);
-  --gradient-info: linear-gradient(135deg, #60a5fa, #2563eb);
+  --gradient-primary: linear-gradient(135deg, #f59a1e, #f36b2e);
+  --gradient-accent: linear-gradient(135deg, #c4e7e5, #253c96);
+  --gradient-info: linear-gradient(135deg, #253c96, #19244e);
 
   /* Text Colors */
-  --text-primary: #0f172a;
-  --text-secondary: #334155;
-  --text-muted: #475569;
-  --text-dimmed: #64748b;
+  --text-primary: #c4e7e5; /* Ocean Water */
+  --text-secondary: #ffffff;
+  --text-muted: rgba(196, 231, 229, 0.6);
+  --text-dimmed: rgba(196, 231, 229, 0.4);
 
-  /* Border & Shadows using blue tints */
-  --border-subtle: rgba(37, 99, 235, 0.12);
-  --border-medium: rgba(37, 99, 235, 0.2);
-  --border-focus: rgba(37, 99, 235, 0.35);
+  /* Border & Shadows */
+  --border-subtle: rgba(196, 231, 229, 0.15);
+  --border-medium: rgba(196, 231, 229, 0.3);
+  --border-focus: #f59a1e;
 
-  --shadow-sm: 0 2px 8px rgba(37, 99, 235, 0.06);
-  --shadow-md: 0 4px 16px rgba(37, 99, 235, 0.08);
-  --shadow-lg: 0 8px 32px rgba(37, 99, 235, 0.12);
-  --shadow-glow-primary: 0 0 20px rgba(37, 99, 235, 0.12);
-  --shadow-glow-danger: 0 0 18px rgba(239, 68, 68, 0.12);
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.15);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.2);
+  --shadow-glow-primary: 0 0 10px rgba(245, 154, 30, 0.2);
+  --shadow-glow-danger: 0 0 10px rgba(243, 107, 46, 0.2);
 
   /* Glass */
-  --glass-bg: rgba(255, 255, 255, 0.85);
-  --glass-bg-hover: rgba(255, 255, 255, 0.95);
-  --glass-border: rgba(37, 99, 235, 0.08);
+  --glass-bg: rgba(37, 60, 150, 0.15);
+  --glass-bg-hover: rgba(37, 60, 150, 0.25);
+  --glass-border: rgba(196, 231, 229, 0.15);
 
   /* Spacing */
-  --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 16px;
-  --radius-xl: 24px;
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-xl: 32px;
 
   /* Transitions */
-  --transition-fast: 0.2s ease;
-  --transition-normal: 0.3s ease;
-  --transition-slow: 0.5s ease;
+  --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 
   /* Font */
-  --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-family: 'Outfit', sans-serif;
 }
 
 /* =========================================
@@ -102,28 +104,14 @@ html {
 
 body {
   font-family: var(--font-family);
-  background-color: var(--bg-primary);
+  background: var(--surface-page);
   color: var(--text-primary);
   line-height: 1.6;
   min-height: 100vh;
   overflow-x: hidden;
 }
 
-/* Background gradient mesh — soft pastel blobs */
-body::before {
-  content: '';
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background:
-    radial-gradient(ellipse at 20% 20%, rgba(37, 99, 235, 0.12) 0%, transparent 50%),
-    radial-gradient(ellipse at 80% 80%, rgba(96, 165, 250, 0.08) 0%, transparent 50%),
-    radial-gradient(ellipse at 50% 50%, rgba(249, 115, 22, 0.06) 0%, transparent 50%);
-  pointer-events: none;
-  z-index: 0;
-}
+/* Background gradient mesh removed for performance */
 
 #root {
   position: relative;
@@ -132,13 +120,14 @@ body::before {
 }
 
 a {
-  color: var(--accent-primary);
+  color: var(--accent-orange);
   text-decoration: none;
-  transition: color var(--transition-fast);
+  transition: color var(--transition-fast), text-shadow var(--transition-fast);
 }
 
 a:hover {
-  color: var(--accent-secondary);
+  color: var(--accent-red);
+  text-shadow: 0 0 8px rgba(243, 107, 46, 0.4);
 }
 
 button {
@@ -146,6 +135,11 @@ button {
   cursor: pointer;
   border: none;
   outline: none;
+  transition: all var(--transition-normal);
+}
+
+button:active {
+  transform: scale(0.95);
 }
 
 input,
@@ -153,6 +147,7 @@ select,
 textarea {
   font-family: var(--font-family);
   outline: none;
+  color: var(--text-secondary);
 }
 
 img {
@@ -165,8 +160,8 @@ img {
    ========================================= */
 
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 10px;
+  height: 10px;
 }
 
 ::-webkit-scrollbar-track {
@@ -174,12 +169,12 @@ img {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(37, 99, 235, 0.35);
-  border-radius: 4px;
+  background: var(--accent-blue);
+  border-radius: 5px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(37, 99, 235, 0.55);
+  background: var(--accent-orange);
 }
 
 /* Visible form inputs & search */
@@ -187,23 +182,32 @@ img {
 .input-search,
 input[type="text"],
 input[type="number"],
+input[type="password"],
 textarea,
 select {
   background: var(--form-bg);
   border: 1px solid var(--form-border);
-  padding: 0.75rem 0.9rem;
-  border-radius: var(--radius-md);
-  transition: box-shadow var(--transition-fast), border-color var(--transition-fast);
+  padding: 1rem 1.2rem;
+  border-radius: var(--radius-lg);
+  color: #ffffff;
+  transition: box-shadow var(--transition-fast), border-color var(--transition-fast), transform var(--transition-fast);
 }
 
 .form-input:focus,
 .input-search:focus,
 input[type="text"]:focus,
 input[type="number"]:focus,
+input[type="password"]:focus,
 textarea:focus,
 select:focus {
-  box-shadow: 0 6px 20px rgba(37,99,235,0.06);
+  box-shadow: var(--shadow-glow-primary);
   border-color: var(--form-focus);
+  transform: translateY(-2px);
+}
+
+select option {
+  background: var(--bg-secondary);
+  color: #fff;
 }
 
 /* =========================================
@@ -211,116 +215,18 @@ select:focus {
    ========================================= */
 
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 @keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes slideDown {
-  from {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes slideInLeft {
-  from {
-    opacity: 0;
-    transform: translateX(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes scaleIn {
-  from {
-    opacity: 0;
-    transform: scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-@keyframes shimmer {
-  0% {
-    background-position: -200% 0;
-  }
-  100% {
-    background-position: 200% 0;
-  }
-}
-
-@keyframes pulse {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.5;
-  }
-}
-
-@keyframes shake {
-  0%, 100% {
-    transform: translateX(0);
-  }
-  10%, 30%, 50%, 70%, 90% {
-    transform: translateX(-4px);
-  }
-  20%, 40%, 60%, 80% {
-    transform: translateX(4px);
-  }
-}
-
-@keyframes gradientShift {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
-
-@keyframes float {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-6px);
-  }
-}
-
-@keyframes glow {
-  0%, 100% {
-    box-shadow: 0 0 20px rgba(37, 99, 235, 0.12);
-  }
-  50% {
-    box-shadow: 0 0 30px rgba(37, 99, 235, 0.22);
-  }
+  from { opacity: 0; transform: scale(0.92); }
+  to { opacity: 1; transform: scale(1); }
 }
 
 /* =========================================
@@ -328,11 +234,11 @@ select:focus {
    ========================================= */
 
 .fade-in {
-  animation: fadeIn 0.5s ease forwards;
+  animation: fadeIn 0.6s ease forwards;
 }
 
 .slide-up {
-  animation: slideUp 0.5s ease forwards;
+  animation: slideUp 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
 }
 
 .gradient-text {
@@ -340,4 +246,5 @@ select:focus {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  font-weight: 700;
 }

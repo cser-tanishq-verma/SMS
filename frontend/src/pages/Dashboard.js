@@ -14,6 +14,28 @@ const Dashboard = () => {
     myRequests: 0,
   });
 
+  const [showAuditLogs, setShowAuditLogs] = useState(false);
+  const [auditLogs, setAuditLogs] = useState([]);
+  const [auditLoading, setAuditLoading] = useState(false);
+
+  const toggleAuditLogs = async () => {
+    if (!showAuditLogs) {
+      setAuditLoading(true);
+      try {
+        const response = await api.get('/api/inventory/audit-logs');
+        const sortedLogs = response.data.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+        setAuditLogs(sortedLogs);
+        setShowAuditLogs(true);
+      } catch (err) {
+        console.error('Failed to fetch audit logs', err);
+      } finally {
+        setAuditLoading(false);
+      }
+    } else {
+      setShowAuditLogs(false);
+    }
+  };
+
   useEffect(() => {
     const loadStats = async () => {
       setLoading(true);
@@ -60,9 +82,9 @@ const Dashboard = () => {
 
   return (
     <div className="page-card">
-      <div className="page-header">
+      <div className="page-header" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
         <div>
-          <h1>Dashboard</h1>
+          <h1 style={{ fontSize: '2.5rem', background: 'var(--gradient-primary)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Dashboard Overview</h1>
         </div>
       </div>
 
@@ -101,6 +123,59 @@ const Dashboard = () => {
       </div>
 
       {loading && <div className="page-loading">Loading dashboard...</div>}
+
+      {showAuditLogs && user?.role === 'ADMIN' && (
+        <div style={{ marginTop: '2rem', background: 'var(--bg-secondary)', padding: '1.5rem', borderRadius: 'var(--radius-lg)' }}>
+          <h2 style={{ textAlign: 'center', marginBottom: '1rem' }}>Security & Audit Logs</h2>
+          <div className="table-wrapper">
+            <table className="data-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Action</th>
+                  <th>Item ID</th>
+                  <th>Item Name</th>
+                  <th>Changed By</th>
+                  <th>Details</th>
+                  <th>Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                {auditLogs.length ? (
+                  auditLogs.map((log) => (
+                    <tr key={log.id}>
+                      <td>{log.id}</td>
+                      <td><span style={{ padding: '4px 8px', borderRadius: '4px', background: 'rgba(243, 107, 46, 0.2)', color: '#f36b2e', fontWeight: 'bold', fontSize: '0.8rem' }}>{log.action}</span></td>
+                      <td>{log.itemId}</td>
+                      <td>{log.itemName}</td>
+                      <td>{log.changedBy}</td>
+                      <td>{log.details}</td>
+                      <td>{new Date(log.createdAt).toLocaleString()}</td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="7" className="empty-row">No audit logs found.</td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+
+      {user?.role === 'ADMIN' && (
+        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '3rem' }}>
+          <button 
+            className="btn btn-primary" 
+            style={{ padding: '1rem 3rem', fontSize: '1.2rem', borderRadius: '50px' }}
+            onClick={toggleAuditLogs} 
+            disabled={auditLoading}
+          >
+            {auditLoading ? 'Loading Logs...' : (showAuditLogs ? 'Close Audit Logs' : 'Open Audit Logs Dashboard')}
+          </button>
+        </div>
+      )}
     </div>
   );
 };
